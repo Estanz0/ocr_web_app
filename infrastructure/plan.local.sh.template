@@ -1,0 +1,28 @@
+while getopts ":e:" option; do
+    case $option in
+        e) # environment
+            env=$OPTARG;;
+        \?) # Invalid option
+            echo "Error: Invalid option"
+            exit;;
+   esac
+done
+
+if [ -z "$env" ]; then
+    echo "Environment not specified"
+    exit 1
+else 
+    echo "Environment: $env"
+fi
+
+
+export ARM_CLIENT_ID="your_client_id"
+export ARM_CLIENT_SECRET="your_client_secret"
+export ARM_SUBSCRIPTION_ID="your_subscription_id"
+export ARM_TENANT_ID="your_tenant_id"
+export ARM_ACCESS_KEY="tfstate_storage_account_key"
+
+terraform init -chdir=deploy
+terraform fmt -chdir=deploy
+terraform workspace select $env -chdir=deploy
+terraform plan -chdir=deploy -var client_id=$ARM_CLIENT_ID -var client_secret=$ARM_CLIENT_SECRET -var subscription_id=$ARM_SUBSCRIPTION_ID -var tenant_id=$ARM_TENANT_ID -out $env.tfplan
