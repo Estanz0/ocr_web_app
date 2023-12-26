@@ -13,7 +13,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 env:
   TF_VERSION: 1.6.3
@@ -96,3 +95,5 @@ jobs:
     - name: Terraform Apply
       if: github.event_name == 'push' && success()
       run: terraform -chdir=${{ env.TF_CONFIG_DIR }} apply -auto-approve -input=false tfplan
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
