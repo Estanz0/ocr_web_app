@@ -50,6 +50,19 @@ variable "st_container_name_image_upload" {
   type = string
 }
 
+# Key Vault
+variable "kv_sku_name" {
+  type = string
+}
+
+variable "kv_soft_delete_retention_days" {
+  type = number
+}
+
+variable "secret_ocr_api_key" {
+  type = string
+}
+
 # Service Plan
 variable "asp_os_type" {
   type = string
