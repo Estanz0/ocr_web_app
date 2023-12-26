@@ -39,7 +39,7 @@ resource "azurerm_service_plan" "default" {
 
 # Function App
 resource "azurerm_linux_function_app" "default" {
-  name                = "fa-${var.project_id}-${terraform.workspace}-eau-001}"
+  name                = "fa-${var.project_id}-${terraform.workspace}-eau-001"
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
 
