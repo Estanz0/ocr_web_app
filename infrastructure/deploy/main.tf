@@ -71,5 +71,5 @@ resource "github_actions_environment_secret" "action_secret_fa_publish_profile" 
   repository            = data.github_repository.repo.name
   environment           = var.env
   secret_name           = "FUNCTION_APP_PUBLISH_PROFILE"
-  encrypted_value       = azurerm_linux_function_app.default.name
+  encrypted_value       = base64encode(azurerm_linux_function_app.default.name)
 }
