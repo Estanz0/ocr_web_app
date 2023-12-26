@@ -46,6 +46,10 @@ variable "st_account_replication_type" {
   type = string
 }
 
+variable "st_container_name_image_upload" {
+  type = string
+}
+
 # Service Plan
 variable "asp_os_type" {
   type = string
