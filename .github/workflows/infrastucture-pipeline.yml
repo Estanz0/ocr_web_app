@@ -5,11 +5,15 @@ on:
     branches:
       - dev
       - prod
+    paths:
+      - 'infrastructure'
 
   pull_request:
     branches:
       - dev
       - prod
+    paths:
+      - 'infrastructure'
 
 permissions:
   contents: read
