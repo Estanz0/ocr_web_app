@@ -1,0 +1,76 @@
+
+name: Backend Pipeline
+
+on:
+  push:
+    branches:
+      - dev
+      - prod
+    paths:
+      - backend
+
+  pull_request:
+    branches:
+      - dev
+      - prod
+    paths:
+      - backend
+
+jobs:
+  get_branch_name:
+    name: Get Branch Name
+    runs-on: ubuntu-latest
+    outputs:
+      branch_name: ${{ steps.set_branch.outputs.branch_name }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set Branch Name
+        id: set_branch
+        run: |
+          echo "branch_name=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          if [  -n "${{ github.base_ref }}"  ]; then
+            echo "branch_name=${{ github.base_ref }}" >> $GITHUB_OUTPUT
+          fi
+          
+  build-and-deploy:
+    needs: get_branch_name
+    runs-on: ubuntu-latest
+    environment: ${{ needs.get_branch_name.outputs.branch_name }}
+    env:
+      AZURE_FUNCTIONAPP_NAME: ${{ vars.FUNCTION_APP_NAME }}
+      AZURE_FUNCTIONAPP_PACKAGE_PATH: './backend'
+      PYTHON_VERSION: ${{ vars.FUNCTION_APP_NAME }}
+      
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@v3
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Setup Python ${{ env.PYTHON_VERSION }} Environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: 'Resolve Project Dependencies Using Pip'
+      shell: bash
+      run: |
+        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+        popd
+
+    - name: 'Run Azure Functions Action'
+      uses: Azure/functions-action@v1
+      id: fa
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        scm-do-build-during-deployment: true
+        enable-oryx-build: true
