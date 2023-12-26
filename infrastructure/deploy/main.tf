@@ -27,28 +27,33 @@ resource "azurerm_storage_account" "default" {
 }
 
 # App Service Plan
-resource "azurerm_app_service_plan" "default" {
+resource "azurerm_service_plan" "default" {
   name                = "asp-${terraform.workspace}-eau-001"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
-  kind                = var.asp_kind
 
-  sku {
-    tier = var.asp_sku_tier
-    size = var.asp_sku_size
-  }
+  os_type = var.asp_os_type
+  sku_name = var.asp_sku_name
+
 }
 
 # Function App
 resource "azurerm_linux_function_app" "default" {
-  name                = "fa-${terraform.workspace}-eau-001"
+  name                = "fa-${terraform.workspace}-eau-001}"
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
 
   storage_account_name       = azurerm_storage_account.default.name
   storage_account_access_key = azurerm_storage_account.default.primary_access_key
-  service_plan_id            = azurerm_app_service_plan.default.id
+  service_plan_id            = azurerm_service_plan.default.id
 
-  site_config {}
+
+
+  site_config {
+    always_on = var.fa_always_on
+    application_stack {
+      python_version = var.fa_python_version
+    }
+  }
 }
 

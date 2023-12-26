@@ -4,7 +4,8 @@ location = "australiaeast"
 st_account_tier = "Standard"
 st_account_replication_type = "LRS"
 
-# App Service Plan
-asp_kind = "Linux"
-asp_sku_tier = "Basic"
-asp_sku_size = "B1"
+# Service Plan
+asp_os_type = "Linux"
+
+# Function App
+fa_python_version = "3.10"

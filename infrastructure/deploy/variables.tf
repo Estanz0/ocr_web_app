@@ -27,15 +27,20 @@ variable "st_account_replication_type" {
   type = string
 }
 
-# App Service Plan
-variable "asp_kind" {
+# Service Plan
+variable "asp_os_type" {
   type = string
 }
 
-variable "asp_sku_tier" {
+variable "asp_sku_name" {
   type = string
 }
 
-variable "asp_sku_size" {
+# Function App
+variable "fa_python_version" {
   type = string
+}
+
+variable "fa_always_on" {
+  type = bool
 }
