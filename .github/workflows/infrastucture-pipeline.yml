@@ -6,14 +6,14 @@ on:
       - dev
       - prod
     paths:
-      - 'infrastructure'
+      - 'infrastructure/**'
 
   pull_request:
     branches:
       - dev
       - prod
     paths:
-      - 'infrastructure'
+      - 'infrastructure/**'
 
 permissions:
   contents: read
