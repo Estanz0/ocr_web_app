@@ -3,6 +3,10 @@ variable "project_id" {
   type = string
 }
 
+variable "env" {
+  type = string
+}
+
 variable "location" {
   type = string
 }
@@ -21,6 +25,15 @@ variable "subscription_id" {
 }
 
 variable "tenant_id" {
+  type = string
+}
+
+# Github
+variable "gh_repo_owner" {
+  type = string
+}
+
+variable "gh_repo_name" {
   type = string
 }
 
