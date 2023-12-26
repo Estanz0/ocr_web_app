@@ -97,6 +97,15 @@ resource "azurerm_linux_function_app" "default" {
   }
 }
 
+resource "azurerm_key_vault_access_policy" "example" {
+  key_vault_id = azurerm_key_vault.default.id
+  tenant_id    = azurerm_linux_function_app.default.identity[0].tenant_id
+  object_id    = azurerm_linux_function_app.default.identity[0].principal_id
+
+  key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
+  secret_permissions = [ "Delete", "Get", "List", "Set" ]
+}
+
 # Github Secrets / Variables
 data "github_repository" "repo" {
   full_name = "${var.gh_repo_owner}/${var.gh_repo_name}"
