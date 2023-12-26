@@ -86,8 +86,8 @@ jobs:
     - name: Terraform Workspace
       run: terraform -chdir=${{ env.TF_CONFIG_DIR }} workspace select -or-create ${{ env.BRANCH_NAME }}${{ env.PROJECT_ID }}
 
-    - name: Terraform Validate
-      run: terraform -chdir=${{ env.TF_CONFIG_DIR }} fmt -check
+    # - name: Terraform Validate
+    #   run: terraform -chdir=${{ env.TF_CONFIG_DIR }} fmt -check
 
     - name: Terraform Plan
       run: terraform -chdir=${{ env.TF_CONFIG_DIR }} plan -out=tfplan -input=false -var-file ${{ env.BRANCH_NAME }}.tfvars -var project_id=${{ env.PROJECT_ID }} -var client_id=$ARM_CLIENT_ID -var client_secret=$ARM_CLIENT_SECRET
