@@ -43,7 +43,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.get_branch_name.outputs.branch_name }}
     env:
-      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
       BRANCH_NAME: ${{ needs.get_branch_name.outputs.branch_name }}
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -68,10 +67,11 @@ jobs:
     - name: Prepare ARM Environment Variables
       run: |
         # Parse Azure secret into env variables
-        echo "ARM_CLIENT_ID=$( jq -r '.clientId' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
-        echo "ARM_CLIENT_SECRET=$( jq -r '.clientSecret' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
-        echo "ARM_SUBSCRIPTION_ID=$( jq -r '.subscriptionId' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
-        echo "ARM_TENANT_ID=$( jq -r '.tenantId' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV
+        echo "ARM_CLIENT_ID=$( jq -r '.ARM_CLIENT_ID' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
+        echo "ARM_CLIENT_SECRET=$( jq -r '.ARM_CLIENT_SECRET' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
+        echo "ARM_SUBSCRIPTION_ID=$( jq -r '.ARM_SUBSCRIPTION_ID' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
+        echo "ARM_TENANT_ID=$( jq -r '.ARM_TENANT_ID' <<< $AZURE_CREDENTIALS )" >> $GITHUB_ENV;
+        echo "ARM_ACCESS_KEY=$( jq -r '.ARM_ACCESS_KEY' <<< $ARM_ACCESS_KEY )" >> $GITHUB_ENV;
       env:
         AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
 
