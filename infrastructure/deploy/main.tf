@@ -51,13 +51,13 @@ resource "azurerm_key_vault" "default" {
   access_policy {
     tenant_id = var.tenant_id
     object_id = var.client_id
-    key_permissions = [ "get", "list", "create", "delete" ]
-    secret_permissions = [ "get", "list", "set", "delete" ]
+    key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
+    secret_permissions = [ "Delete", "Get", "List", "Set" ]
   }
 }
 
 resource "azurerm_key_vault_secret" "ocr_api_key" {
-  name         = "ocr_api_key"
+  name         = "ocrapikey"
   value        = var.secret_ocr_api_key
   key_vault_id = azurerm_key_vault.default.id
 }
@@ -107,4 +107,11 @@ resource "github_actions_environment_variable" "action_variable_fa_name" {
   environment      = var.env
   variable_name    = "FUNCTION_APP_NAME"
   value            = azurerm_linux_function_app.default.name
+}
+
+resource "github_actions_environment_variable" "action_variable_fa_python_version" {
+  repository       = data.github_repository.repo.name
+  environment      = var.env
+  variable_name    = "FUNCTION_APP_PYTHON_VERSION"
+  value            = var.fa_python_version
 }

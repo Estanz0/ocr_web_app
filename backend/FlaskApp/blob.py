@@ -8,8 +8,8 @@ from azure.identity import DefaultAzureCredential
 class BlobClient:
     def __init__(self):
         self.credential = DefaultAzureCredential()
-        self.blob_service_client = BlobServiceClient(account_url=Config.BLOB_ACCOUNT_URL, credential=self.credential)
-        self.container_name = Config.BLOB_CONTAINER_NAME
+        self.blob_service_client = BlobServiceClient(account_url=Config.STORAGE_ACCOUNT_URL_IMAGE_UPLOAD, credential=self.credential)
+        self.container_name = Config.STORAGE_CONTAINER_NAME_IMAGE_UPLOAD
 
     def upload_blob_file(self, data, filename):
         container_client = self.blob_service_client.get_container_client(container=self.container_name)
