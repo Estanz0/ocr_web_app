@@ -91,7 +91,9 @@ jobs:
 
     - name: Terraform Plan
       run: terraform -chdir=${{ env.TF_CONFIG_DIR }} plan -out=tfplan -input=false -var-file ${{ env.BRANCH_NAME }}.tfvars -var project_id=${{ env.PROJECT_ID }} -var env=${{ env.BRANCH_NAME }} -var client_id=$ARM_CLIENT_ID -var client_secret=$ARM_CLIENT_SECRET -var subscription_id=$ARM_SUBSCRIPTION_ID -var tenant_id=$ARM_TENANT_ID -var gh_repo_owner=${{ github.repository_owner }} -var gh_repo_name=${{ github.event.repository.name }}
-
+      env:
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        
     - name: Terraform Apply
       if: github.event_name == 'push' && success()
       run: terraform -chdir=${{ env.TF_CONFIG_DIR }} apply -auto-approve -input=false tfplan
