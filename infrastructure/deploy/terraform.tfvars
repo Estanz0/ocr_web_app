@@ -1,3 +1,5 @@
+project_id = "ocr"
+
 location = "australiaeast"
 
 # Storage Account
