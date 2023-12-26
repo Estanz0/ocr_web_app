@@ -5,6 +5,9 @@
 # Subscription
 data "azurerm_subscription" "default" {}
 
+# SPN
+data "azurerm_client_config" "current" {}
+
 ############################
 # Terraform Infrastructure #
 ############################
@@ -27,7 +30,7 @@ resource "azurerm_storage_account" "default" {
 resource "azurerm_storage_container" "default" {
   name                  = var.st_container_name_image_upload
   storage_account_name  = azurerm_storage_account.default.name
-  container_access_type = "anonymous"
+  container_access_type = "blob"
 }
 
 resource "azurerm_role_assignment" "default" {
