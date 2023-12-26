@@ -93,7 +93,7 @@ resource "azurerm_linux_function_app" "default" {
   app_settings = {
     "STORAGE_ACCOUNT_URL_IMAGE_UPLOAD": azurerm_storage_account.default.primary_blob_endpoint,
     "STORAGE_CONTAINER_NAME_IMAGE_UPLOAD": azurerm_storage_container.default.name,
-    "OCR_API_KEY": "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault.default.vault_uri}/secrets/${azurerm_key_vault_secret.ocr_api_key.name}/)"
+    "OCR_API_KEY": "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault.default.vault_uri}secrets/${azurerm_key_vault_secret.ocr_api_key.name}/)"
   }
 }
 
