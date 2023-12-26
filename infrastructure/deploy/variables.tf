@@ -1,3 +1,13 @@
+# General
+variable "project_id" {
+  type = string
+}
+
+variable "location" {
+  type = string
+}
+
+# SPN
 variable "client_id" {
   type = string
 }
@@ -11,10 +21,6 @@ variable "subscription_id" {
 }
 
 variable "tenant_id" {
-  type = string
-}
-
-variable "location" {
   type = string
 }
 
