@@ -102,7 +102,7 @@ resource "azurerm_linux_function_app" "default" {
 }
 
 resource "azurerm_key_vault_access_policy" "default" {
-  count = azurerm_linux_function_app.default.identity != null ? 1 : 0
+  count = azurerm_linux_function_app.default.identity[0].principal_id != null ? 1 : 0
   key_vault_id = azurerm_key_vault.default.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azurerm_linux_function_app.default.identity[0].principal_id
