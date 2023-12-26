@@ -10,4 +10,4 @@ st_account_replication_type = "LRS"
 asp_os_type = "Linux"
 
 # Function App
-fa_python_version = "3.10"
+fa_python_version = "3.9"
