@@ -5,6 +5,9 @@
 # Subscription
 data "azurerm_subscription" "default" {}
 
+# SPN
+data "azurerm_client_config" "current" {}
+
 ############################
 # Terraform Infrastructure #
 ############################
@@ -22,6 +25,18 @@ resource "azurerm_storage_account" "default" {
     location                 = azurerm_resource_group.default.location
     account_tier             = var.st_account_tier
     account_replication_type = var.st_account_replication_type
+}
+
+resource "azurerm_storage_container" "default" {
+  name                  = var.st_container_name_image_upload
+  storage_account_name  = azurerm_storage_account.default.name
+  container_access_type = "blob"
+}
+
+resource "azurerm_role_assignment" "default" {
+  scope                = azurerm_storage_account.default.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
 # App Service Plan
@@ -45,13 +60,16 @@ resource "azurerm_linux_function_app" "default" {
   storage_account_access_key = azurerm_storage_account.default.primary_access_key
   service_plan_id            = azurerm_service_plan.default.id
 
-
-
   site_config {
     always_on = var.fa_always_on
     application_stack {
       python_version = var.fa_python_version
     }
+  }
+
+  app_settings = {
+    "STORAGE_ACCOUNT_URL_IMAGE_UPLOAD": azurerm_storage_account.default.primary_blob_endpoint,
+    "STORAGE_CONTAINER_NAME_IMAGE_UPLOAD": azurerm_storage_container.default.name
   }
 }
 
