@@ -51,8 +51,8 @@ resource "azurerm_key_vault" "default" {
   access_policy {
     tenant_id = var.tenant_id
     object_id = var.client_id
-    key_permissions = [ "get", "list", "create", "delete" ]
-    secret_permissions = [ "get", "list", "set", "delete" ]
+    key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
+    secret_permissions = [ "Delete", "Get", "List", "Set" ]
   }
 }
 
