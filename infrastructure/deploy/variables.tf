@@ -28,10 +28,14 @@ variable "st_account_replication_type" {
 }
 
 # App Service Plan
-variable "asp_os_type" {
+variable "asp_kind" {
   type = string
 }
 
-variable "asp_sku_name" {
+variable "asp_sku_tier" {
+  type = string
+}
+
+variable "asp_sku_size" {
   type = string
 }
