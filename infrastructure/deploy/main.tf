@@ -57,7 +57,7 @@ resource "azurerm_key_vault" "default" {
 }
 
 resource "azurerm_key_vault_secret" "ocr_api_key" {
-  name         = "ocr_api_key"
+  name         = "ocrapikey"
   value        = var.secret_ocr_api_key
   key_vault_id = azurerm_key_vault.default.id
 }
