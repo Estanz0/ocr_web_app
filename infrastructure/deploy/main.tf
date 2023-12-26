@@ -101,7 +101,7 @@ resource "azurerm_linux_function_app" "default" {
   }
 }
 
-resource "azurerm_key_vault_access_policy" "example" {
+resource "azurerm_key_vault_access_policy" "default" {
   key_vault_id = azurerm_key_vault.default.id
   tenant_id    = azurerm_linux_function_app.default.identity[0].tenant_id
   object_id    = azurerm_linux_function_app.default.identity[0].principal_id
