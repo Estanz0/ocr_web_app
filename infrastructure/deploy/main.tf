@@ -39,6 +39,29 @@ resource "azurerm_role_assignment" "default" {
   principal_id         = data.azurerm_client_config.current.object_id
 }
 
+# Key Vault
+resource "azurerm_key_vault" "default" {
+  name                        = "kv-${var.project_id}-${var.env}-eau-001"
+  location                    = azurerm_resource_group.default.location
+  resource_group_name         = azurerm_resource_group.default.name
+  tenant_id                   = data.azurerm_client_config.current.tenant_id
+  sku_name                    = var.kv_sku_name
+  soft_delete_retention_days  = var.kv_soft_delete_retention_days
+
+  access_policy {
+    tenant_id = var.tenant_id
+    object_id = var.client_id
+    key_permissions = [ "get", "list", "create", "delete" ]
+    secret_permissions = [ "get", "list", "set", "delete" ]
+  }
+}
+
+resource "azurerm_key_vault_secret" "ocr_api_key" {
+  name         = "ocr_api_key"
+  value        = var.secret_ocr_api_key
+  key_vault_id = azurerm_key_vault.default.id
+}
+
 # App Service Plan
 resource "azurerm_service_plan" "default" {
   name                = "asp-${var.project_id}-${var.env}-eau-001"
@@ -69,7 +92,8 @@ resource "azurerm_linux_function_app" "default" {
 
   app_settings = {
     "STORAGE_ACCOUNT_URL_IMAGE_UPLOAD": azurerm_storage_account.default.primary_blob_endpoint,
-    "STORAGE_CONTAINER_NAME_IMAGE_UPLOAD": azurerm_storage_container.default.name
+    "STORAGE_CONTAINER_NAME_IMAGE_UPLOAD": azurerm_storage_container.default.name,
+    "OCR_API_KEY": "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault.default.vault_uri}/secrets/${azurerm_key_vault_secret.ocr_api_key.name}/)"
   }
 }
 
