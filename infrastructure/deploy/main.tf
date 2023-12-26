@@ -83,6 +83,10 @@ resource "azurerm_linux_function_app" "default" {
   storage_account_access_key = azurerm_storage_account.default.primary_access_key
   service_plan_id            = azurerm_service_plan.default.id
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   site_config {
     always_on = var.fa_always_on
     application_stack {
