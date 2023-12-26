@@ -73,6 +73,23 @@ resource "azurerm_service_plan" "default" {
 
 }
 
+# Log Analytics Workspace
+resource "azurerm_log_analytics_workspace" "default" {
+  name                = "log-${var.project_id}-${var.env}-eau-001"
+  location            = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.default.name
+}
+
+# Application Insights
+resource "azurerm_application_insights" "default" {
+  name                = "appi-${var.project_id}-${var.env}-eau-001"
+  location            = azurerm_resource_group.default.location
+  resource_group_name = azurerm_resource_group.default.name
+  application_type    = "web"
+
+  workspace_id = azurerm_log_analytics_workspace.default.id
+}
+
 # Function App
 resource "azurerm_linux_function_app" "default" {
   name                = "fa-${var.project_id}-${var.env}-eau-001"
@@ -89,6 +106,10 @@ resource "azurerm_linux_function_app" "default" {
 
   site_config {
     always_on = var.fa_always_on
+    
+    application_insights_key = azurerm_application_insights.default.instrumentation_key
+    application_insights_connection_string = azurerm_application_insights.default.connection_string
+
     application_stack {
       python_version = var.fa_python_version
     }
