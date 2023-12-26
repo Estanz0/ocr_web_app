@@ -68,8 +68,8 @@ resource "github_actions_environment_variable" "action_variable_fa_name" {
 }
 
 resource "github_actions_environment_secret" "action_secret_fa_publish_profile" {
-  repository       = data.github_repository.repo.name
-  environment      = var.env
-  secret_name      = "FUNCTION_APP_PUBLISH_PROFILE"
-  plaintext_value  = "todo"
+  repository            = data.github_repository.repo.name
+  environment           = var.env
+  secret_name           = "FUNCTION_APP_PUBLISH_PROFILE"
+  encrypted_value       = azurerm_linux_function_app.default.name
 }
