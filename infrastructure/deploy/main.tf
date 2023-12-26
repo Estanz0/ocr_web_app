@@ -108,3 +108,10 @@ resource "github_actions_environment_variable" "action_variable_fa_name" {
   variable_name    = "FUNCTION_APP_NAME"
   value            = azurerm_linux_function_app.default.name
 }
+
+resource "github_actions_environment_variable" "action_variable_fa_python_version" {
+  repository       = data.github_repository.repo.name
+  environment      = var.env
+  variable_name    = "FUNCTION_APP_PYTHON_VERSION"
+  value            = var.fa_python_version
+}
