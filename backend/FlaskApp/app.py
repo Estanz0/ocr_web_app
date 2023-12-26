@@ -17,8 +17,8 @@ blobClient = BlobClient()
 class UploadImage(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('filename', type=str, required=True, location='form')
-        parser.add_argument('image', type=werkzeug.datastructures.FileStorage, required=True, location='files')
+        parser.add_argument('filename', type=str, required=True, location='form', help='Filename cannot be blank!')
+        parser.add_argument('image', type=werkzeug.datastructures.FileStorage, required=True, location='files', help='Image cannot be blank!')
         args = parser.parse_args()
 
         # Upload to Blob Storage
