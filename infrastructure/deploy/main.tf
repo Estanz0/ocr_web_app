@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "default" {
 
 # Storage Account
 resource "azurerm_storage_account" "default" {
-    name                     = "st${var.project_id}${terraform.workspace}eau001"
+    name                     = "st${var.project_id}${var.env}eau001"
     resource_group_name      = azurerm_resource_group.default.name
     location                 = azurerm_resource_group.default.location
     account_tier             = var.st_account_tier
@@ -26,7 +26,7 @@ resource "azurerm_storage_account" "default" {
 
 # App Service Plan
 resource "azurerm_service_plan" "default" {
-  name                = "asp-${var.project_id}-${terraform.workspace}-eau-001"
+  name                = "asp-${var.project_id}-${var.env}-eau-001"
   location            = azurerm_resource_group.default.location
   resource_group_name = azurerm_resource_group.default.name
 
@@ -37,7 +37,7 @@ resource "azurerm_service_plan" "default" {
 
 # Function App
 resource "azurerm_linux_function_app" "default" {
-  name                = "fa-${var.project_id}-${terraform.workspace}-eau-001"
+  name                = "fa-${var.project_id}-${var.env}-eau-001"
   resource_group_name = azurerm_resource_group.default.name
   location            = azurerm_resource_group.default.location
 
