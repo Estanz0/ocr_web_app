@@ -60,21 +60,16 @@ data "github_repository" "repo" {
   full_name = "${var.gh_repo_owner}/${var.gh_repo_name}"
 }
 
-resource "github_repository_environment" "repo_environment" {
-  repository       = data.github_repository.repo.name
-  environment      = var.env
-}
-
 resource "github_actions_environment_variable" "action_variable_fa_name" {
   repository       = data.github_repository.repo.name
-  environment      = github_repository_environment.repo_environment.environment
+  environment      = var.env
   variable_name    = "FUNCTION_APP_NAME"
   value            = azurerm_linux_function_app.default.name
 }
 
 resource "github_actions_environment_secret" "action_secret_fa_publish_profile" {
   repository       = data.github_repository.repo.name
-  environment      = github_repository_environment.repo_environment.environment
+  environment      = var.env
   secret_name      = "FUNCTION_APP_PUBLISH_PROFILE"
   plaintext_value  = "todo"
 }
