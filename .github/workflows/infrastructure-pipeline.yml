@@ -7,7 +7,7 @@ on:
       - prod
     paths:
       - 'infrastructure/**'
-      - '.github/workflows/infrastructure**'
+      - '.github/workflows/infrastucture**'
 
   pull_request:
     branches:
