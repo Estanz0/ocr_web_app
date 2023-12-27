@@ -19,9 +19,9 @@ concurrency:
 env:
   APP_PATH: "frontend/app"
   NODE_VERSION: 20
+  CI: false # Allows to deploy with warnings present
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
