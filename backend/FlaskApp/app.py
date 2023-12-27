@@ -35,8 +35,13 @@ class OCR(Resource):
         parser.add_argument('image_url', type=str, required=True)
         args = parser.parse_args()
 
-        parsed_image_results =  OCRAPI.ocr_url(url=args['image_url'])
-        parsed_text = parsed_image_results['ParsedResults'][0]['ParsedText']
+        data =  OCRAPI.ocr_url(url=args['image_url'])
+        parsed_results = data.get('ParsedResults', None)
+
+        if parsed_results is None or len(parsed_results) == 0:
+            return {"text": ""}
+        
+        parsed_text = parsed_results[0].get('ParsedText', None)
 
         return {"text": parsed_text}
 

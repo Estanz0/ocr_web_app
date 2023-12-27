@@ -53,9 +53,5 @@ class OCRAPI:
         r = requests.post('https://api.ocr.space/parse/image',
                         data=payload,
                         )
+
         return r.json()
-
-
-# # Use examples:
-# test_file = ocr_space_file(filename='example_image.png', language='pol')
-# test_url = ocr_space_url(url='http://i.imgur.com/31d5L5y.jpg')
