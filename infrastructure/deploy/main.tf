@@ -134,21 +134,28 @@ resource "azurerm_linux_function_app" "default" {
   }
 }
 
+# Work around for missing Attributes in azurerm_linux_function_app
+data "azurerm_function_app" "azurerm_linux_function_app" {
+    name = azurerm_linux_function_app.default.name
+    resource_group_name = azurerm_linux_function_app.default.resource_group_name
+}
+
 resource "azurerm_key_vault_access_policy" "default" {
-  count = azurerm_linux_function_app.default.identity[0].principal_id != null ? 1 : 0
   key_vault_id = azurerm_key_vault.default.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = azurerm_linux_function_app.default.identity[0].principal_id
+  object_id    = data.azurerm_function_app.azurerm_linux_function_app.identity[0].principal_id 
+  # object_id = azurerm_linux_function_app.default.identity[0].principal_id
 
   key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
   secret_permissions = [ "Delete", "Get", "List", "Set" ]
 }
 
 resource "azurerm_role_assignment" "fa_sami_sbdc" {
-  count = azurerm_linux_function_app.default.identity[0].principal_id != null ? 1 : 0
   scope                = azurerm_storage_account.default.id
   role_definition_name = "Storage Blob Data Contributor"
-  principal_id         = azurerm_linux_function_app.default.identity[0].principal_id
+  principal_id         = data.azurerm_function_app.azurerm_linux_function_app.identity[0].principal_id 
+  # principal_id = azurerm_linux_function_app.default.identity[0].principal_id
+
 }
 
 # Github Secrets / Variables
@@ -167,7 +174,8 @@ resource "github_actions_environment_variable" "action_variable_fa_url" {
   repository       = data.github_repository.repo.name
   environment      = var.env
   variable_name    = "FUNCTION_APP_URL"
-  value            = azurerm_linux_function_app.default.default_hostname
+  value            = data.azurerm_function_app.azurerm_linux_function_app.default_hostname
+  # value            = azurerm_linux_function_app.default.default_hostname
 }
 
 resource "github_actions_environment_variable" "action_variable_fa_python_version" {
