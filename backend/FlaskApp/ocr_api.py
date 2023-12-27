@@ -51,7 +51,6 @@ class OCRAPI:
         :return: Result in JSON format.
         """
         logging.info(f'OCRAPI: ocr_url: url={url}')
-        logging.info(f'Config: OCR_API_KEY={Config.OCR_API_KEY}')
 
         payload = {'url': url,
                 'isOverlayRequired': overlay,
