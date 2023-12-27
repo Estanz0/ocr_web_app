@@ -33,7 +33,7 @@ resource "azurerm_storage_container" "default" {
   container_access_type = "blob"
 }
 
-resource "azurerm_role_assignment" "default" {
+resource "azurerm_role_assignment" "spn_sbdc" {
   scope                = azurerm_storage_account.default.id
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = data.azurerm_client_config.current.object_id
@@ -106,7 +106,7 @@ resource "azurerm_linux_function_app" "default" {
 
   site_config {
     always_on = var.fa_always_on
-    
+
     application_insights_key = azurerm_application_insights.default.instrumentation_key
     application_insights_connection_string = azurerm_application_insights.default.connection_string
 
@@ -130,6 +130,13 @@ resource "azurerm_key_vault_access_policy" "default" {
 
   key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
   secret_permissions = [ "Delete", "Get", "List", "Set" ]
+}
+
+resource "azurerm_role_assignment" "fa_sami_sbdc" {
+  count = azurerm_linux_function_app.default.identity[0].principal_id != null ? 1 : 0
+  scope                = azurerm_storage_account.default.id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azurerm_linux_function_app.default.identity[0].principal_id
 }
 
 # Github Secrets / Variables
