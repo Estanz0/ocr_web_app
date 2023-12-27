@@ -54,6 +54,12 @@ resource "azurerm_key_vault" "default" {
     key_permissions = [ "Create", "Delete", "Get", "List", "Update" ]
     secret_permissions = [ "Delete", "Get", "List", "Set" ]
   }
+
+  lifecycle {
+    ignore_changes = [
+      access_policy,
+    ]
+  }
 }
 
 resource "azurerm_key_vault_secret" "ocr_api_key" {
@@ -119,6 +125,12 @@ resource "azurerm_linux_function_app" "default" {
     "STORAGE_ACCOUNT_URL_IMAGE_UPLOAD": azurerm_storage_account.default.primary_blob_endpoint,
     "STORAGE_CONTAINER_NAME_IMAGE_UPLOAD": azurerm_storage_container.default.name,
     "OCR_API_KEY": "@Microsoft.KeyVault(SecretUri=${azurerm_key_vault.default.vault_uri}secrets/${azurerm_key_vault_secret.ocr_api_key.name}/)"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      tags,
+    ]
   }
 }
 
