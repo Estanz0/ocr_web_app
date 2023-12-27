@@ -5,6 +5,8 @@ function ImageOCR() {
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
     const [parsedText, setParsedText] = useState<string | null>(null);
 
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -14,7 +16,7 @@ function ImageOCR() {
             formData.append('filename', selectedImage.name);
 
             // Send the POST request with the image and filename
-            fetch('http://127.0.0.1:5000/upload_image', {
+            fetch(`${backendUrl}/upload_image`, {
                 method: 'POST',
                 body: formData,
             })
@@ -39,7 +41,7 @@ function ImageOCR() {
 
     const handleParseText = () => {
         if (uploadedImageUrl) {
-            fetch('http://127.0.0.1:5000/ocr', {
+            fetch(`${backendUrl}/ocr`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +61,7 @@ function ImageOCR() {
                     // Handle the error
                 });
         }
-    }; // Add a closing curly brace here
+    };
 
     return (
         <div className="ImageOCR">
