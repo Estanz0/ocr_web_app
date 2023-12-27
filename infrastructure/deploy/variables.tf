@@ -77,6 +77,10 @@ variable "fa_python_version" {
   type = string
 }
 
+variable "fa_cors_allowed_origins" {
+  type = list(string)
+}
+
 variable "fa_always_on" {
   type = bool
 }

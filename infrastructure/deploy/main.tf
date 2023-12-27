@@ -119,6 +119,10 @@ resource "azurerm_linux_function_app" "default" {
     application_stack {
       python_version = var.fa_python_version
     }
+
+    cors {
+      allowed_origins = var.fa_cors_allowed_origins
+    }
   }
 
   app_settings = {
