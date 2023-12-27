@@ -122,6 +122,7 @@ resource "azurerm_linux_function_app" "default" {
 
     cors {
       allowed_origins = var.fa_cors_allowed_origins
+      support_credentials = true
     }
   }
 
