@@ -174,7 +174,7 @@ resource "github_actions_environment_variable" "action_variable_fa_url" {
   repository       = data.github_repository.repo.name
   environment      = var.env
   variable_name    = "FUNCTION_APP_URL"
-  value            = data.azurerm_function_app.azurerm_linux_function_app.default_hostname
+  value            = "https://${data.azurerm_function_app.azurerm_linux_function_app.default_hostname}"
   # value            = azurerm_linux_function_app.default.default_hostname
 }
 
