@@ -1,7 +1,7 @@
 from FlaskApp.ocr_api import OCRAPI
 from FlaskApp.blob import BlobClient
 
-import json
+import logging
 import werkzeug
 
 from flask import Flask
@@ -16,6 +16,8 @@ blobClient = BlobClient()
 
 class UploadImage(Resource):
     def post(self):
+        logging.info(f'UploadImage: Post:')
+
         parser = reqparse.RequestParser()
         parser.add_argument('filename', type=str, required=True, location='form', help='Filename cannot be blank!')
         parser.add_argument('image', type=werkzeug.datastructures.FileStorage, required=True, location='files', help='Image cannot be blank!')
@@ -31,6 +33,8 @@ class UploadImage(Resource):
 
 class OCR(Resource):
     def post(self):
+        logging.info(f'OCR: Post:')
+
         parser = reqparse.RequestParser()
         parser.add_argument('image_url', type=str, required=True)
         args = parser.parse_args()

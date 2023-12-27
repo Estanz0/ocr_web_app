@@ -1,8 +1,7 @@
 from FlaskApp.config import Config
 
 import requests
-import json
-
+import logging
 
 class OCRAPI:
     def ocr_file(filename:str, overlay:bool=False, language:str='eng'):
@@ -19,6 +18,8 @@ class OCRAPI:
         :return: Result in JSON format.
         """
 
+        logging.info(f'OCRAPI: ocr_file: filename={filename}')
+
         payload = {'isOverlayRequired': overlay,
                 'apikey': Config.OCR_API_KEY,
                 'language': language,
@@ -28,7 +29,12 @@ class OCRAPI:
                             files={filename: f},
                             data=payload,
                             )
-        return r.content.decode()
+            
+        json_data = r.json()
+
+        logging.info(f'OCRAPI: ocr_file: r.json()={json_data}')
+
+        return json_data
 
 
     def ocr_url(url:str, overlay:bool=False, language:str='eng'):
@@ -44,6 +50,7 @@ class OCRAPI:
                         Defaults to 'en'.
         :return: Result in JSON format.
         """
+        logging.info(f'OCRAPI: ocr_url: url={url}')
 
         payload = {'url': url,
                 'isOverlayRequired': overlay,
@@ -53,5 +60,9 @@ class OCRAPI:
         r = requests.post('https://api.ocr.space/parse/image',
                         data=payload,
                         )
+        
+        json_data = r.json()
 
-        return r.json()
+        logging.info(f'OCRAPI: ocr_url: r.json()={json_data}')
+
+        return json_data

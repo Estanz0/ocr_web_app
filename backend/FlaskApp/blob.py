@@ -1,4 +1,4 @@
-import os
+import logging
 
 from FlaskApp.config import Config
 
@@ -12,6 +12,7 @@ class BlobClient:
         self.container_name = Config.STORAGE_CONTAINER_NAME_IMAGE_UPLOAD
 
     def upload_blob_file(self, data, filename):
+        logging.info(f'BlobClient: upload_blob_file: filename={filename}')
         container_client = self.blob_service_client.get_container_client(container=self.container_name)
         
         content_settings = ContentSettings(content_type="image/jpeg")
